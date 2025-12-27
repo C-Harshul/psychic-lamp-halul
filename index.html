@@ -104,6 +104,7 @@
         .label {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 12px;
             margin-bottom: 24px;
         }
@@ -130,6 +131,7 @@
             letter-spacing: -0.02em;
             color: #ffffff;
             margin-bottom: 24px;
+            text-align: center;
         }
 
         @media (max-width: 768px) {
@@ -144,6 +146,9 @@
             color: #a0a0a0;
             max-width: 600px;
             margin-bottom: 64px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         @media (max-width: 768px) {
@@ -195,15 +200,13 @@
             }
         }
 
-        .border-top {
-            border-top: 1px solid #2a2a2a;
-        }
 
         h3 {
             font-size: 20px;
             font-weight: 400;
             color: #ffffff;
             margin-bottom: 12px;
+            text-align: left;
         }
 
         .card-text {
@@ -253,12 +256,67 @@
             border-color: #2a2a2a;
         }
 
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(160, 180, 224, 0.1);
+            border: 1px solid #A0B4E0;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 300;
+            color: #A0B4E0;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #A0B4E0;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .cta-section {
+            padding-top: 200px;
+            padding-bottom: 200px;
+        }
+
+        @media (max-width: 1024px) {
+            .cta-section {
+                padding-top: 180px;
+                padding-bottom: 180px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cta-section {
+                padding-top: 160px;
+                padding-bottom: 160px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cta-section {
+                padding-top: 140px;
+                padding-bottom: 140px;
+            }
+        }
+
         /* Hero responsive styles - matching Locus */
         .hero-section {
-            padding-top: 160px;
+            padding-top: 240px;
             padding-left: 40px;
             padding-right: 40px;
-            padding-bottom: 120px;
+            padding-bottom: 200px;
+            margin-bottom: 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         .hero-title {
@@ -266,8 +324,9 @@
             font-weight: 300;
             line-height: 1.2;
             letter-spacing: -0.015em;
-            margin-bottom: 32px;
+            margin-bottom: 40px;
             color: #ffffff;
+            text-align: center;
         }
 
         .hero-subtitle {
@@ -275,15 +334,18 @@
             font-weight: 300;
             color: #a0a0a0;
             line-height: 1.6;
-            max-width: 540px;
+            max-width: 600px;
+            margin: 0 auto 56px;
+            text-align: center;
         }
 
         @media (max-width: 1024px) {
             .hero-section {
-                padding-top: 140px;
+                padding-top: 200px;
                 padding-left: 32px;
                 padding-right: 32px;
-                padding-bottom: 100px;
+                padding-bottom: 160px;
+                margin-bottom: 0;
             }
 
             .hero-title {
@@ -293,36 +355,41 @@
 
         @media (max-width: 768px) {
             .hero-section {
-                padding-top: 120px;
+                padding-top: 160px;
                 padding-left: 24px;
                 padding-right: 24px;
-                padding-bottom: 80px;
+                padding-bottom: 120px;
+                margin-bottom: 0;
             }
 
             .hero-title {
                 font-size: 40px;
-                margin-bottom: 24px;
+                margin-bottom: 32px;
             }
 
             .hero-subtitle {
                 font-size: 16px;
+                margin-bottom: 48px;
             }
         }
 
         @media (max-width: 480px) {
             .hero-section {
-                padding-top: 100px;
+                padding-top: 140px;
                 padding-left: 20px;
                 padding-right: 20px;
-                padding-bottom: 60px;
+                padding-bottom: 100px;
+                margin-bottom: 0;
             }
 
             .hero-title {
                 font-size: 32px;
+                margin-bottom: 28px;
             }
 
             .hero-subtitle {
                 font-size: 15px;
+                margin-bottom: 40px;
             }
         }
     </style>
@@ -331,36 +398,37 @@
 <body>
     <!-- Header -->
     <header style="position: absolute; top: 0; left: 0; right: 0; z-index: 50; padding: 32px 40px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto;">
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
             <a href="#" style="text-decoration: none;">
                 <img src="data:image/svg+xml,%3csvg%20width='160'%20height='26'%20viewBox='0%200%20160%2026'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3ctext%20x='0'%20y='20'%20font-family='Arial,%20sans-serif'%20font-size='22'%20font-weight='bold'%20fill='%23ffffff'%3eNUMINA%3c/text%3e%3c/svg%3e" alt="Numina" style="height: 26px;">
             </a>
-            <a href="#" style="background: #A0B4E0; border: 1px solid #A0B4E0; color: #ffffff; padding: 12px 24px; font-size: 14px; text-decoration: none; transition: all 0.3s;">Launch App</a>
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                <span>MVP ready</span>
+            </div>
         </div>
     </header>
 
     <!-- Hero Section -->
     <section class="hero-section" style="background: #0a0a0a;">
-        <div style="max-width: 1400px; margin: 0 auto;">
-            <div style="max-width: 750px; margin-bottom: 40px;">
-                <h1 class="hero-title">
-                    AI Agents for<br>
-                    <span style="color: #666666;">Real-Time Closing</span>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                AI Agents for<br>
+                <span style="color: #666666;">Real-Time Closing</span>
                 </h1>
-                <p class="hero-subtitle" style="max-width: 600px;">
-                    Chasing receipts and matching invoices is eating your margin on small clients. Numina does the grunt work so you can serve more clients profitably.
+            <p class="hero-subtitle">
+                Chasing receipts and matching invoices is eating your margin on small clients. Numina does the grunt work so you can serve more clients profitably.
                 </p>
-            </div>
 
-            <div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start;">
+            <div style="display: flex; flex-direction: column; gap: 16px; align-items: center; margin-top: 56px;">
                 <a href="https://forms.gle/gprd8EuGD65VVGQYA" target="_blank" style="border: 1px solid #A0B4E0; color: #A0B4E0; padding: 12px 28px; font-size: 14px; text-decoration: none; transition: all 0.3s; display: inline-block;">Join Beta</a>
-                <p style="font-size: 14px; color: #666666; font-weight: 300;">Free pilot for qualified CPAs</p>
+                <p style="font-size: 14px; color: #666666; font-weight: 300; text-align: center;">Free pilot for qualified CPAs</p>
             </div>
         </div>
     </section>
 
     <!-- How It Works Section -->
-    <section class="section-spacing">
+    <section class="section-spacing" style="padding-top: 120px;">
         <div class="container">
             <h2>Connect. Validate. Close.</h2>
             <p class="subtitle" style="margin-bottom: 64px;">Three simple steps to cleaner books</p>
@@ -394,7 +462,7 @@
     </section>
 
     <!-- Three Capabilities Section -->
-    <section class="section-spacing border-top" style="margin-top: 0;">
+    <section class="section-spacing " style="margin-top: 0;">
         <div class="container">
             <div class="label">
                 <div class="label-dot"></div>
@@ -434,7 +502,7 @@
     </section>
 
     <!-- Trust & Control Section -->
-    <section class="section-spacing border-top" style="margin-top: 0;">
+    <section class="section-spacing " style="margin-top: 0; padding-bottom: 200px;">
         <div class="container">
             <div class="label">
                 <div class="label-dot"></div>
@@ -447,7 +515,7 @@
                 <div class="card">
                     <h3>You set the rules</h3>
                     <p class="card-text">Define what gets flagged, what gets auto-approved, what needs review</p>
-                </div>
+                    </div>
 
                 <div class="card">
                     <h3>You see everything</h3>
@@ -463,56 +531,20 @@
     </section>
 
     <!-- Bottom CTA Section -->
-    <section class="section-spacing border-top" style="margin-top: 0;">
+    <section class="section-spacing  cta-section">
         <div class="container">
-            <div style="max-width: 700px; text-align: left;">
+            <div style="max-width: 700px; margin: 0 auto;">
                 <h2 style="margin-bottom: 24px;">Ready to take on more clients?</h2>
-                <p style="font-size: 18px; font-weight: 300; color: #a0a0a0; line-height: 1.6; margin-bottom: 40px;">
+                <p style="font-size: 18px; font-weight: 300; color: #a0a0a0; line-height: 1.6; margin-bottom: 40px; text-align: center;">
                     Free pilot for qualified CPAs. We prove the ROI before you pay.
                 </p>
-                <div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start;">
+                <div style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
                     <a href="https://forms.gle/gprd8EuGD65VVGQYA" target="_blank" style="border: 1px solid #A0B4E0; color: #A0B4E0; padding: 12px 28px; font-size: 14px; text-decoration: none; transition: all 0.3s; display: inline-block;">Join Beta</a>
-                    <p style="font-size: 14px; color: #666666; font-weight: 300;">Limited spots available</p>
+                    <p style="font-size: 14px; color: #666666; font-weight: 300; text-align: center;">Limited spots available</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer style="border-top: 1px solid #2a2a2a; padding: 56px 40px; background: #0a0a0a;">
-        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: start;">
-            <div>
-                <img src="data:image/svg+xml,%3csvg%20width='160'%20height='26'%20viewBox='0%200%20160%2026'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3ctext%20x='0'%20y='20'%20font-family='Arial,%20sans-serif'%20font-size='22'%20font-weight='bold'%20fill='%23ffffff'%3eNUMINA%3c/text%3e%3c/svg%3e" alt="Numina" style="height: 26px; margin-bottom: 32px;">
-                <img src="./newimg.png" alt="Footer graphic" style="max-width: 400px; height: auto;">
-            </div>
-
-            <div style="display: flex; gap: 100px; padding-top: 40px;">
-                <div>
-                    <h4 style="font-size: 18px; color: #ffffff; margin-bottom: 24px;">Resources</h4>
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <a href="blog.html" style="font-size: 14px; font-weight: 300; color: #a0a0a0; text-decoration: none;">Blog</a>
-                        <a href="mailto:founders@paywithnumina.com" style="font-size: 14px; font-weight: 300; color: #a0a0a0; text-decoration: none;">Contact</a>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 style="font-size: 18px; color: #ffffff; margin-bottom: 24px;">Legal</h4>
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <a href="#" style="font-size: 14px; font-weight: 300; color: #a0a0a0; text-decoration: none;">Privacy Policy</a>
-                        <a href="#" style="font-size: 14px; font-weight: 300; color: #a0a0a0; text-decoration: none;">Terms of Service</a>
-                    </div>
-                </div>
-
-                <div style="padding-top: 64px; display: flex; gap: 16px;">
-                    <a href="https://x.com/paywithnumina" target="_blank" style="opacity: 0.7; transition: opacity 0.3s;">
-                        <img src="data:image/svg+xml,%3csvg%20width='22'%20height='22'%20viewBox='0%200%2022%2022'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_2362_30550)'%3e%3cpath%20d='M13.0951%209.31654L21.2865%200H19.3461L12.2305%208.08777L6.5516%200H0L8.58953%2012.2313L0%2021.9999H1.9404L9.44973%2013.4571L15.4484%2021.9999H22M2.64073%201.43174H5.62173L19.3446%2020.6385H16.3629'%20fill='%23a0a0a0'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_2362_30550'%3e%3crect%20width='22'%20height='22'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e" alt="X" style="height: 20px;">
-                    </a>
-                    <a href="https://www.linkedin.com/company/paywithnumina" target="_blank" style="opacity: 0.7; transition: opacity 0.3s;">
-                        <img src="data:image/svg+xml,%3csvg%20width='24'%20height='23'%20viewBox='0%200%2024%2023'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M12.9287%209.04102C13.7992%207.43036%2016.1849%206.47293%2018.4229%206.85742C19.5183%207.0457%2020.5354%207.55244%2021.2783%208.4248C22.0188%209.29428%2022.5225%2010.5691%2022.5225%2012.3584V21.5625H18.7822V14.0215C18.7822%2012.7032%2018.3871%2011.6781%2017.7354%2010.9844C17.0843%2010.2916%2016.2123%209.96864%2015.3457%209.99609C13.591%2010.0519%2011.9434%2011.5208%2011.9434%2014.0215V21.5625H8.2207V7.24707H11.9424V8.79199L12.9287%209.04102ZM4.27637%207.24707V21.5625H0.524414V7.24707H4.27637ZM2.40039%200.524414C3.42192%200.524414%204.2576%201.36108%204.25781%202.40039C4.25781%203.44071%203.42219%204.27637%202.40039%204.27637C1.37878%204.27615%200.543945%203.44058%200.543945%202.40039C0.544161%201.36122%201.37905%200.524634%202.40039%200.524414Z'%20fill='%23a0a0a0'%20stroke='%23a0a0a0'%20stroke-width='1.0497'/%3e%3c/svg%3e" alt="LinkedIn" style="height: 20px;">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>

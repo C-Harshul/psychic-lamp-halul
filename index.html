@@ -422,8 +422,8 @@
         }
 
         .plate-chips {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 8px;
         }
 
@@ -432,8 +432,8 @@
             background: rgba(241, 240, 237, 0.03);
             border-radius: 8px;
             padding: 8px 10px;
+            flex: unset;
             min-width: 0;
-            flex: 1 1 140px;
         }
 
         .chip strong {
@@ -565,6 +565,72 @@
             color: var(--bg);
             border-color: var(--paper);
             outline: none;
+        }
+
+        @media (max-width: 1100px) {
+            .arch-row {
+                grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+                gap: 20px;
+            }
+            .plate { padding: 14px 16px; gap: 8px; }
+            .plate-title { font-size: 16px; }
+            .chip strong,
+            .chip span { font-size: 10px; }
+            .layer-copy h2 { font-size: clamp(16px, 2.2vw, 22px); }
+            .layer-copy p { font-size: 13px; }
+            html.deck-mode .arch-sticky { padding: 24px 4.5vw 28px; }
+        }
+
+        @media (max-width: 860px) {
+            .wordmark { font-size: clamp(32px, 10vw, 64px); letter-spacing: 0.16em; }
+            .backed img { height: 32px; }
+            .athena-img,
+            .athena-frame { max-width: min(180px, 46vw); max-height: 38vh; }
+            .how-live,
+            .who-live { font-size: clamp(20px, 6.4vw, 44px); }
+            .arch-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .layer-copy {
+                padding-left: 12px;
+                padding-top: 6px;
+            }
+            .layer-kicker { display: none; }
+            .layer-copy p { display: none; }
+            .layer-copy h2 { font-size: 15px; margin-bottom: 0; }
+            .chip span:not(.chip-tag) { display: none; }
+            .chip { padding: 6px 8px; }
+            .plate { padding: 10px 12px; }
+            .plate-kicker { font-size: 9px; }
+            .plate-title { font-size: 14px; }
+            html.deck-mode .arch-sticky { padding: 14px 4vw 16px; }
+            html.deck-mode .who-sticky,
+            html.deck-mode .live-sticky { padding: 28px 5vw; }
+            .who-line,
+            .privacy-body { font-size: clamp(15px, 3.6vw, 20px); }
+            .arch-rows { gap: 10px; }
+            .arch-tagline { font-size: clamp(14px, 3.4vw, 18px); min-height: 2.2em; margin-top: 8px; }
+        }
+
+        @media (max-width: 640px) {
+            .how-live,
+            .who-live { font-size: clamp(18px, 6.8vw, 32px); }
+            .plate-chips { gap: 5px; }
+            .chip-tag { font-size: 8px; padding: 1px 5px; }
+        }
+
+        @media (max-height: 780px) {
+            html.deck-mode .arch-sticky { padding-top: 12px; padding-bottom: 12px; }
+            .arch-rows { gap: 8px; }
+            .plate { padding: 8px 12px; gap: 6px; }
+            .layer-copy p { display: none; }
+        }
+
+        @media (max-height: 680px) {
+            .layer-copy { display: none; }
+            .arch-row { grid-template-columns: 1fr; }
+            .chip span:not(.chip-tag) { display: none; }
         }
 
         @media (max-width: 768px) {

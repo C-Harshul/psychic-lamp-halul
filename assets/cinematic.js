@@ -101,6 +101,59 @@
             return Math.round(window.innerHeight * 0.72);
         }
 
+        function dockTop() {
+            return Math.round(Math.max(12, Math.min(40, window.innerHeight * 0.05)));
+        }
+
+        function fitHeadings() {
+            qa('#who-heading, #how-heading, #privacy-heading, #join-heading').forEach(function (el) {
+                if (!el) return;
+                el.style.fontSize = '';
+                var box = el.parentElement;
+                if (!box) return;
+                var maxW = box.clientWidth;
+                if (maxW < 40) return;
+                var size = parseFloat(window.getComputedStyle(el).fontSize);
+                var guard = 0;
+                while (el.scrollWidth > maxW && size > 16 && guard < 48) {
+                    size -= 0.75;
+                    el.style.fontSize = size + 'px';
+                    guard += 1;
+                }
+            });
+        }
+
+        function fitArchBlocks() {
+            if (!archSticky || !archRows) return;
+            if (window.getComputedStyle(archRows).display === 'none') {
+                gsap.set(archRows, { scale: 1 });
+                return;
+            }
+            gsap.set(archRows, { scale: 1, transformOrigin: '50% 100%' });
+            var stickyH = archSticky.clientHeight;
+            var tagH = 0;
+            if (tagline && window.getComputedStyle(tagline).display !== 'none') {
+                tagH = tagline.offsetHeight + 10;
+            }
+            var titleH = 52;
+            if (howTitle) titleH = Math.max(32, howTitle.getBoundingClientRect().height + 10);
+            var avail = stickyH - tagH - titleH;
+            var need = archRows.scrollHeight;
+            if (need < 16 || avail < 16) return;
+            var scale = Math.min(1, avail / need);
+            gsap.set(archRows, {
+                scale: Math.max(0.52, scale),
+                transformOrigin: '50% 100%'
+            });
+        }
+
+        function scheduleFit() {
+            window.requestAnimationFrame(function () {
+                fitHeadings();
+                fitArchBlocks();
+            });
+        }
+
         function setStage(id, visible) {
             stages.forEach(function (el) {
                 var on = el.id === id && visible !== false;
@@ -177,7 +230,7 @@
 
             if (howWrap) {
                 gsap.to(howWrap, {
-                    top: showTitleSmall ? 40 : window.innerHeight * 0.5,
+                    top: showTitleSmall ? dockTop() : window.innerHeight * 0.5,
                     yPercent: showTitleSmall ? 0 : -50,
                     duration: t,
                     ease: 'power3.inOut',
@@ -268,6 +321,7 @@
             }
 
             setFocus(layers, showTag);
+            gsap.delayedCall((t || 0.02) + 0.02, scheduleFit);
         }
 
         function applyScene(index, dur) {
@@ -299,6 +353,7 @@
                     current = index;
                     animating = false;
                     coolUntil = Date.now() + 280;
+                    scheduleFit();
                 });
                 return;
             }
@@ -332,6 +387,7 @@
                     current = index;
                     animating = false;
                     coolUntil = Date.now() + 280;
+                    scheduleFit();
                 }
             });
 
@@ -374,6 +430,21 @@
         });
         setStage('intro', true);
         applyScene(0, 0);
+        scheduleFit();
+
+        var fitTimer = 0;
+        window.addEventListener('resize', function () {
+            window.clearTimeout(fitTimer);
+            fitTimer = window.setTimeout(function () {
+                if (howWrap && stageId(current) === 'architecture') {
+                    gsap.set(howWrap, {
+                        top: current >= 5 ? dockTop() : window.innerHeight * 0.5,
+                        yPercent: current >= 5 ? 0 : -50
+                    });
+                }
+                scheduleFit();
+            }, 80);
+        });
 
         window.addEventListener('wheel', function (e) {
             if (e.ctrlKey) return;

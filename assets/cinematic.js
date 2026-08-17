@@ -392,7 +392,7 @@
                     e.preventDefault();
                     var scene = parseInt(btn.getAttribute('data-scene'), 10);
                     if (!isFinite(scene)) return;
-                    goTo(scene);
+                    goTo(scene, true);
                 });
             });
         }
@@ -446,7 +446,7 @@
             return 9;
         }
 
-        function goTo(index) {
+        function goTo(index, skipAnim) {
             window.clearTimeout(autoTimer);
             if (index === current || animating) return;
             if (index < 0 || index >= SCENES.length) return;
@@ -454,7 +454,7 @@
             var goingBack = index < current;
             var fromStage = stageId(current);
             var toStage = stageId(index);
-            var dur = goingBack ? PAGE : DUR;
+            var dur = skipAnim ? 0 : (goingBack ? PAGE : DUR);
             animating = true;
             syncTabs(index);
 

@@ -96,6 +96,7 @@
         var animating = false;
         var coolUntil = 0;
         var DUR = 0.85;
+        var autoTimer = 0;
 
         function riseFrom() {
             return Math.round(window.innerHeight * 0.72);
@@ -371,6 +372,7 @@
         }
 
         function goTo(index) {
+            window.clearTimeout(autoTimer);
             if (index === current || animating) return;
             if (index < 0 || index >= SCENES.length) return;
 
@@ -465,6 +467,9 @@
         syncArchMode(0);
         applyScene(0, 0);
         scheduleFit();
+        autoTimer = window.setTimeout(function () {
+            if (current === 0 && !animating) goTo(1);
+        }, 2000);
 
         var fitTimer = 0;
         window.addEventListener('resize', function () {

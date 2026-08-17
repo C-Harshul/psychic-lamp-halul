@@ -123,30 +123,41 @@
             });
         }
 
-        function fitArchBlocks() {
-            if (!archSticky || !archRows) return;
-            if (window.getComputedStyle(archRows).display === 'none') {
-                gsap.set(archRows, { scale: 1 });
-                return;
-            }
-            var portrait = window.matchMedia('(orientation: portrait)').matches;
-            gsap.set(archRows, { scale: 1, transformOrigin: portrait ? '50% 50%' : '50% 100%' });
-            if (portrait) return;
-            var stickyH = archSticky.clientHeight;
-            var tagH = 0;
-            if (tagline && window.getComputedStyle(tagline).display !== 'none') {
-                tagH = tagline.offsetHeight + 10;
-            }
-            var titleH = 52;
-            if (howTitle) titleH = Math.max(32, howTitle.getBoundingClientRect().height + 10);
-            var avail = stickyH - tagH - titleH;
-            var need = archRows.scrollHeight;
-            if (need < 16 || avail < 16) return;
-            var scale = Math.min(1, avail / need);
-            gsap.set(archRows, {
-                scale: Math.max(0.52, scale),
-                transformOrigin: '50% 100%'
+        function archMode() {
+            var w = window.innerWidth;
+            var h = window.innerHeight;
+            var portrait = h >= w;
+            if (portrait && w < 760) return 'compact';
+            if (h < 760) return 'compact';
+            return 'full';
+        }
+
+        function rowDisplay() {
+            return archMode() === 'compact' ? 'flex' : 'grid';
+        }
+
+        function sceneLayers(index) {
+            var name = SCENES[index];
+            if (name === 'arch-0') return 1;
+            if (name === 'arch-1') return 2;
+            if (name === 'arch-2' || name === 'arch-tag') return 3;
+            return 0;
+        }
+
+        function syncArchMode(layers) {
+            document.documentElement.setAttribute('data-arch', archMode());
+            document.documentElement.setAttribute('data-arch-layers', String(layers || 0));
+            var disp = rowDisplay();
+            rows.forEach(function (row) {
+                if (gsap.getProperty(row, 'display') !== 'none') {
+                    gsap.set(row, { display: disp });
+                }
             });
+        }
+
+        function fitArchBlocks() {
+            if (!archRows) return;
+            gsap.set(archRows, { scale: 1 });
         }
 
         function scheduleFit() {
@@ -269,7 +280,7 @@
                 if (on) {
                     if (!visible) {
                         gsap.set(row, {
-                            display: 'grid',
+                            display: rowDisplay(),
                             autoAlpha: 1,
                             y: t ? riseFrom() : 0,
                             zIndex: 4
@@ -323,6 +334,7 @@
             }
 
             setFocus(layers, showTag);
+            syncArchMode(layers);
             gsap.delayedCall((t || 0.02) + 0.02, scheduleFit);
         }
 
@@ -431,6 +443,7 @@
             gsap.set(el, { opacity: el.id === 'intro' ? 1 : 0 });
         });
         setStage('intro', true);
+        syncArchMode(0);
         applyScene(0, 0);
         scheduleFit();
 
@@ -438,6 +451,7 @@
         window.addEventListener('resize', function () {
             window.clearTimeout(fitTimer);
             fitTimer = window.setTimeout(function () {
+                syncArchMode(sceneLayers(current));
                 if (howWrap && stageId(current) === 'architecture') {
                     gsap.set(howWrap, {
                         top: current >= 5 ? dockTop() : window.innerHeight * 0.5,

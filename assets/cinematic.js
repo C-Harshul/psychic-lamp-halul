@@ -129,7 +129,9 @@
                 gsap.set(archRows, { scale: 1 });
                 return;
             }
-            gsap.set(archRows, { scale: 1, transformOrigin: '50% 100%' });
+            var portrait = window.matchMedia('(orientation: portrait)').matches;
+            gsap.set(archRows, { scale: 1, transformOrigin: portrait ? '50% 50%' : '50% 100%' });
+            if (portrait) return;
             var stickyH = archSticky.clientHeight;
             var tagH = 0;
             if (tagline && window.getComputedStyle(tagline).display !== 'none') {

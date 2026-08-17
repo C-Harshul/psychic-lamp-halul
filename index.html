@@ -107,6 +107,106 @@
 
         a { color: inherit; }
 
+        .deck-tabs {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 42;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(22px, 4.2vw, 52px);
+            padding: 20px 24px 12px;
+            pointer-events: none;
+        }
+
+        html.deck-mode .deck-tabs {
+            display: flex;
+        }
+
+        .deck-tab {
+            pointer-events: auto;
+            appearance: none;
+            -webkit-appearance: none;
+            border: 0;
+            background: none;
+            padding: 0;
+            margin: 0;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            opacity: 0.4;
+            cursor: pointer;
+            transition: opacity 0.4s ease, color 0.4s ease;
+        }
+
+        .deck-tab:hover,
+        .deck-tab:focus-visible {
+            opacity: 0.8;
+            color: var(--paper);
+            outline: none;
+        }
+
+        .deck-tab.is-current {
+            opacity: 0.95;
+            color: var(--paper);
+        }
+
+        .scroll-hint {
+            display: none;
+            position: fixed;
+            left: 50%;
+            bottom: max(18px, env(safe-area-inset-bottom, 0px));
+            transform: translateX(-50%);
+            z-index: 41;
+            margin: 0;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.55;
+            pointer-events: none;
+            transition: opacity 0.45s ease;
+        }
+
+        html.deck-mode .scroll-hint {
+            display: flex;
+        }
+
+        html.deck-mode .scroll-hint.is-gone {
+            opacity: 0;
+        }
+
+        .scroll-hint-icon {
+            width: 22px;
+            height: 22px;
+            display: block;
+            stroke: var(--accent);
+            fill: none;
+            stroke-width: 1.4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            animation: scrollBob 1.8s ease-in-out infinite;
+        }
+
+        @keyframes scrollBob {
+            0%, 100% { opacity: 0.28; transform: translateY(0); }
+            50% { opacity: 0.85; transform: translateY(7px); }
+        }
+
+        @media (max-width: 700px) {
+            .deck-tabs {
+                gap: 14px;
+                padding: 14px 12px 8px;
+            }
+            .deck-tab {
+                font-size: 11px;
+                letter-spacing: 0.12em;
+            }
+        }
+
         /* ---------- Intro: Athena + Brand ---------- */
         #intro {
             position: relative;
@@ -180,7 +280,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 36px;
+            gap: 0;
             pointer-events: none;
             opacity: 0;
             z-index: 2;
@@ -196,7 +296,20 @@
             line-height: 1;
         }
 
+        .tagline {
+            margin: 20px 0 0;
+            font-size: clamp(18px, 2.6vw, 22px);
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            line-height: 1.4;
+            color: rgba(255, 254, 254, 0.62);
+        }
+
         .backed {
+            position: absolute;
+            left: 24px;
+            right: 24px;
+            bottom: calc(max(18px, env(safe-area-inset-bottom, 0px)) + 44px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -802,6 +915,18 @@
     </style>
 </head>
 <body>
+    <nav class="deck-tabs" id="deck-tabs" aria-label="Sections" hidden>
+        <button type="button" class="deck-tab" data-scene="0">Numina</button>
+        <button type="button" class="deck-tab" data-scene="2">What</button>
+        <button type="button" class="deck-tab" data-scene="4">How</button>
+        <button type="button" class="deck-tab" data-scene="9">Privacy</button>
+        <button type="button" class="deck-tab" data-scene="10">Join</button>
+    </nav>
+    <div class="scroll-hint" id="scroll-hint" aria-label="Scroll">
+        <svg class="scroll-hint-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" />
+        </svg>
+    </div>
     <section class="stage" id="intro" aria-label="Athena">
         <div class="intro-sticky">
             <div class="athena-wrap">
@@ -821,6 +946,7 @@
             </div>
             <div class="brand-overlay">
                 <h1 class="wordmark">NUMINA</h1>
+                <p class="tagline">“Your workflow, made intelligent.”</p>
                 <div class="backed">
                     <img src="./assets/D-Pine_wordmark_BLK.png" alt="Dartmouth College">
                     <p>Backed by Dartmouth's Conrades Fellowship</p>

@@ -96,8 +96,10 @@
         var animating = false;
         var coolUntil = 0;
         var DUR = 0.85;
+        var PAGE = 0.62;
         var autoTimer = 0;
         var AUTO_NEXT = { 0: 1, 2: 3 };
+        var AUTO_WAIT = { 0: 500, 2: 500 };
 
         function armAutoAdvance(index) {
             window.clearTimeout(autoTimer);
@@ -105,7 +107,7 @@
             if (next == null) return;
             autoTimer = window.setTimeout(function () {
                 if (current === index && !animating) goTo(next);
-            }, 2000);
+            }, AUTO_WAIT[index] || 2000);
         }
 
         function riseFrom() {
@@ -113,7 +115,7 @@
         }
 
         function dockTop() {
-            return Math.round(Math.max(16, Math.min(44, window.innerHeight * 0.055)));
+            return Math.round(Math.max(56, Math.min(72, window.innerHeight * 0.09)));
         }
 
         function reserveArchHeading() {
@@ -219,7 +221,7 @@
 
         function applyIntro(showBrand, dur) {
             var t = dur || 0;
-            gsap.to(dim, { opacity: showBrand ? 0.72 : 0, duration: t, ease: 'power2.inOut', overwrite: 'auto' });
+            gsap.to(dim, { opacity: showBrand ? 0.88 : 0, duration: t, ease: 'power2.inOut', overwrite: 'auto' });
             gsap.to(brand, {
                 opacity: showBrand ? 1 : 0,
                 y: showBrand ? 0 : 16,
@@ -381,37 +383,131 @@
             if (name === 'arch-tag') applyArch(4, dur);
         }
 
+        function setupTabs() {
+            var nav = q('#deck-tabs');
+            if (!nav) return;
+            nav.hidden = false;
+            qa('.deck-tab', nav).forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var scene = parseInt(btn.getAttribute('data-scene'), 10);
+                    if (!isFinite(scene)) return;
+                    goTo(scene);
+                });
+            });
+        }
+
+        function syncHint(index) {
+            var hint = q('#scroll-hint');
+            if (!hint) return;
+            hint.classList.toggle('is-gone', index >= SCENES.length - 1);
+        }
+
+        function syncTabs(index) {
+            var nav = q('#deck-tabs');
+            if (!nav) return;
+            var active = 4;
+            if (index <= 1) active = 0;
+            else if (index <= 3) active = 1;
+            else if (index <= 8) active = 2;
+            else if (index === 9) active = 3;
+            qa('.deck-tab', nav).forEach(function (btn, i) {
+                var on = i === active;
+                btn.classList.toggle('is-current', on);
+                if (on) btn.setAttribute('aria-current', 'page');
+                else btn.removeAttribute('aria-current');
+            });
+            syncHint(index);
+        }
+
+        function finishGoTo(index, goingBack) {
+            current = index;
+            animating = false;
+            coolUntil = Date.now() + (goingBack ? 140 : 280);
+            scheduleFit();
+            if (!goingBack) armAutoAdvance(index);
+        }
+
+        function hideStage(el) {
+            if (!el) return;
+            el.classList.remove('is-on');
+            el.setAttribute('aria-hidden', 'true');
+            el.setAttribute('inert', '');
+            el.style.zIndex = '';
+            gsap.set(el, { opacity: 0, yPercent: 0 });
+        }
+
+        function prevPage(index) {
+            if (index <= 0) return -1;
+            if (index === 1) return 0;
+            if (index <= 3) return 1;
+            if (index <= 8) return 3;
+            if (index === 9) return 8;
+            return 9;
+        }
+
         function goTo(index) {
             window.clearTimeout(autoTimer);
             if (index === current || animating) return;
             if (index < 0 || index >= SCENES.length) return;
 
+            var goingBack = index < current;
             var fromStage = stageId(current);
             var toStage = stageId(index);
-            var dur = DUR;
+            var dur = goingBack ? PAGE : DUR;
             animating = true;
+            syncTabs(index);
 
             applyScene(index, fromStage === toStage ? dur : 0);
 
             if (fromStage === toStage) {
-                gsap.delayedCall(dur, function () {
-                    current = index;
-                    animating = false;
-                    coolUntil = Date.now() + 280;
-                    scheduleFit();
-                    armAutoAdvance(index);
+                gsap.delayedCall(dur || 0.01, function () {
+                    finishGoTo(index, goingBack);
                 });
                 return;
             }
 
             var incoming = q('#' + toStage);
             var outgoing = q('#' + fromStage);
+
+            if (goingBack) {
+                if (incoming) {
+                    incoming.classList.add('is-on');
+                    incoming.removeAttribute('aria-hidden');
+                    incoming.removeAttribute('inert');
+                    incoming.style.zIndex = '2';
+                    gsap.set(incoming, { opacity: 1, yPercent: -100 });
+                }
+                if (outgoing && outgoing !== incoming) {
+                    outgoing.style.zIndex = '1';
+                    gsap.set(outgoing, { opacity: 1, yPercent: 0 });
+                }
+
+                var back = gsap.timeline({
+                    onComplete: function () {
+                        if (outgoing && outgoing !== incoming) hideStage(outgoing);
+                        if (incoming) {
+                            incoming.style.zIndex = '';
+                            gsap.set(incoming, { opacity: 1, yPercent: 0 });
+                        }
+                        finishGoTo(index, true);
+                    }
+                });
+                if (incoming) {
+                    back.to(incoming, { yPercent: 0, duration: PAGE, ease: 'power2.inOut' }, 0);
+                }
+                if (outgoing && outgoing !== incoming) {
+                    back.to(outgoing, { yPercent: 100, duration: PAGE, ease: 'power2.inOut' }, 0);
+                }
+                return;
+            }
+
             if (incoming) {
                 incoming.classList.add('is-on');
                 incoming.removeAttribute('aria-hidden');
                 incoming.removeAttribute('inert');
                 incoming.style.zIndex = '2';
-                gsap.set(incoming, { opacity: 0 });
+                gsap.set(incoming, { opacity: 0, yPercent: 0 });
             }
             if (outgoing && outgoing !== incoming) {
                 outgoing.style.zIndex = '1';
@@ -419,22 +515,12 @@
 
             var tl = gsap.timeline({
                 onComplete: function () {
-                    if (outgoing && outgoing !== incoming) {
-                        outgoing.classList.remove('is-on');
-                        outgoing.setAttribute('aria-hidden', 'true');
-                        outgoing.setAttribute('inert', '');
-                        outgoing.style.zIndex = '';
-                        gsap.set(outgoing, { opacity: 0 });
-                    }
+                    if (outgoing && outgoing !== incoming) hideStage(outgoing);
                     if (incoming) {
                         incoming.style.zIndex = '';
-                        gsap.set(incoming, { opacity: 1 });
+                        gsap.set(incoming, { opacity: 1, yPercent: 0 });
                     }
-                    current = index;
-                    animating = false;
-                    coolUntil = Date.now() + 280;
-                    scheduleFit();
-                    armAutoAdvance(index);
+                    finishGoTo(index, false);
                 }
             });
 
@@ -447,11 +533,20 @@
         }
 
         function step(dir) {
-            if (animating || Date.now() < coolUntil) return;
+            if (animating) return;
+            if (dir < 0) {
+                var dest = prevPage(current);
+                if (dest < 0) return;
+                goTo(dest);
+                return;
+            }
+            if (Date.now() < coolUntil) return;
             goTo(current + dir);
         }
 
         document.documentElement.classList.add('deck-mode');
+        setupTabs();
+        syncTabs(0);
 
         gsap.set(dim, { opacity: 0 });
         gsap.set(brand, { opacity: 0, y: 16 });

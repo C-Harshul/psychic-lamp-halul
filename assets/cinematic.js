@@ -97,6 +97,16 @@
         var coolUntil = 0;
         var DUR = 0.85;
         var autoTimer = 0;
+        var AUTO_NEXT = { 0: 1, 2: 3 };
+
+        function armAutoAdvance(index) {
+            window.clearTimeout(autoTimer);
+            var next = AUTO_NEXT[index];
+            if (next == null) return;
+            autoTimer = window.setTimeout(function () {
+                if (current === index && !animating) goTo(next);
+            }, 2000);
+        }
 
         function riseFrom() {
             return Math.round(window.innerHeight * 0.72);
@@ -389,6 +399,7 @@
                     animating = false;
                     coolUntil = Date.now() + 280;
                     scheduleFit();
+                    armAutoAdvance(index);
                 });
                 return;
             }
@@ -423,6 +434,7 @@
                     animating = false;
                     coolUntil = Date.now() + 280;
                     scheduleFit();
+                    armAutoAdvance(index);
                 }
             });
 
@@ -467,9 +479,7 @@
         syncArchMode(0);
         applyScene(0, 0);
         scheduleFit();
-        autoTimer = window.setTimeout(function () {
-            if (current === 0 && !animating) goTo(1);
-        }, 2000);
+        armAutoAdvance(0);
 
         var fitTimer = 0;
         window.addEventListener('resize', function () {

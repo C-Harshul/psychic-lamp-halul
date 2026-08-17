@@ -396,7 +396,8 @@
         html.deck-mode[data-arch="full"][data-arch-layers="3"] .arch-rows {
             flex: 1 1 auto;
             justify-content: space-between;
-            padding-top: clamp(44px, 7vh, 68px);
+            padding-top: var(--arch-head-space, 108px);
+            padding-bottom: 12px;
         }
 
         html.deck-mode[data-arch="compact"] .plate {
@@ -433,7 +434,8 @@
         html.deck-mode[data-arch="compact"][data-arch-layers="3"] .arch-rows {
             flex: 1 1 auto;
             justify-content: space-between;
-            padding-top: clamp(44px, 7vh, 68px);
+            padding-top: var(--arch-head-space, 108px);
+            padding-bottom: 12px;
         }
 
         html.deck-mode[data-arch="compact"] .layer-copy p {
@@ -701,8 +703,12 @@
             html:not(.deck-mode) .chip-tag { font-size: 8px; padding: 1px 5px; }
         }
 
+        @media (max-height: 900px) {
+            html.deck-mode .arch-sticky { padding-top: 20px; padding-bottom: 20px; }
+        }
+
         @media (max-height: 780px) {
-            html.deck-mode .arch-sticky { padding-top: 12px; padding-bottom: 12px; }
+            html.deck-mode .arch-sticky { padding-top: 16px; padding-bottom: 16px; }
             html:not(.deck-mode) .arch-rows { gap: 8px; }
             html:not(.deck-mode) .plate { padding: 8px 12px; gap: 6px; }
             .layer-copy p { font-size: 12px; line-height: 1.35; }

@@ -102,7 +102,24 @@
         }
 
         function dockTop() {
-            return Math.round(Math.max(12, Math.min(40, window.innerHeight * 0.05)));
+            return Math.round(Math.max(16, Math.min(44, window.innerHeight * 0.055)));
+        }
+
+        function reserveArchHeading() {
+            if (!archRows || !archSticky || !howTitle) return;
+            var layers = parseInt(document.documentElement.getAttribute('data-arch-layers') || '0', 10);
+            if (layers < 3) {
+                document.documentElement.style.setProperty('--arch-head-space', '0px');
+                return;
+            }
+            var stickyPad = parseFloat(window.getComputedStyle(archSticky).paddingTop) || 0;
+            var size = parseFloat(window.getComputedStyle(howTitle).fontSize) || 48;
+            var line = parseFloat(window.getComputedStyle(howTitle).lineHeight);
+            if (!isFinite(line) || line < 8) line = size * 1.05;
+            var visualH = line * howScale();
+            var gap = 28;
+            var need = Math.ceil(dockTop() + visualH + gap - stickyPad);
+            document.documentElement.style.setProperty('--arch-head-space', Math.max(96, need) + 'px');
         }
 
         function fitHeadings() {
@@ -153,6 +170,7 @@
                     gsap.set(row, { display: disp });
                 }
             });
+            reserveArchHeading();
         }
 
         function fitArchBlocks() {
@@ -163,6 +181,7 @@
         function scheduleFit() {
             window.requestAnimationFrame(function () {
                 fitHeadings();
+                reserveArchHeading();
                 fitArchBlocks();
             });
         }

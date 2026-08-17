@@ -1,694 +1,784 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
     <link rel="icon" type="image/svg+xml" href="./favicon.svg">
     <link rel="icon" type="image/png" href="./favicon.png">
     <link rel="apple-touch-icon" href="./favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
-
-    <!-- Primary Meta Tags -->
-    <title>Numina - Agents Can Act. Numina Makes It Safe.</title>
-    <meta name="title" content="Numina - Agents Can Act. Numina Makes It Safe.">
-    <meta name="description" content="The payment layer for AI agents. Set rules, bind them to agents. Every payment justified, enforced, and audited.">
-    <meta name="keywords" content="AI agents, payment infrastructure, agentic payments, programmatic payments, API payments, agent spending, fintech">
-    <meta name="author" content="Numina Technologies Inc">
+    <title>Numina — one trusted financial picture for fractional CFOs.</title>
+    <meta name="title" content="Numina — one trusted financial picture for fractional CFOs.">
+    <meta name="description" content="Numina gives fractional CFOs and the businesses they serve one trustworthy picture of their finances — doing the repetitive work and surfacing what matters, while you stay in control of every decision.">
+    <meta name="author" content="Numina">
     <meta name="robots" content="index, follow">
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://paywithnumina.com">
-    <meta property="og:title" content="Numina - Agents Can Act. Numina Makes It Safe.">
-    <meta property="og:description" content="The payment layer for AI agents. Set rules, bind them to agents. Every payment justified, enforced, and audited.">
-    <meta property="og:image" content="./og-image.png">
+    <meta property="og:url" content="https://www.numina-ai.com">
+    <meta property="og:title" content="Numina — one trusted financial picture for fractional CFOs.">
+    <meta property="og:description" content="Numina gives fractional CFOs and the businesses they serve one trustworthy picture of their finances.">
+    <meta property="og:image" content="./newimg.png">
     <meta property="og:site_name" content="Numina">
 
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://paywithnumina.com/">
-    <meta name="twitter:title" content="Numina - Agents Can Act. Numina Makes It Safe.">
-    <meta name="twitter:description" content="The payment layer for AI agents. Set rules, bind them to agents. Every payment justified, enforced, and audited.">
-    <meta name="twitter:image" content="./og-image.png">
-    <meta name="twitter:site" content="@paywithnumina">
+    <meta name="twitter:url" content="https://www.numina-ai.com/">
+    <meta name="twitter:title" content="Numina — one trusted financial picture for fractional CFOs.">
+    <meta name="twitter:description" content="Numina gives fractional CFOs and the businesses they serve one trustworthy picture of their finances.">
+    <meta name="twitter:image" content="./newimg.png">
 
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#A0B4E0">
-    <meta name="msapplication-TileColor" content="#A0B4E0">
+    <meta name="theme-color" content="#010100">
+    <meta name="msapplication-TileColor" content="#010100">
 
-    <link rel="stylesheet" href="./assets/index-cxcEbLjJ.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #010100;
+            --paper: #F1F0ED;
+            --white: #FFFEFE;
+            --accent: #A0B4E1;
+            --text: #FFFEFE;
+            --grey: #676667;
+            --muted: #8B8988;
+            --line: rgba(160, 180, 225, 0.22);
+            --line-strong: rgba(160, 180, 225, 0.45);
+            --star: rgba(160, 180, 225, 0.55);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { background: var(--bg); }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #000000;
-            color: #ffffff;
-            line-height: 1.5;
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
+        html.deck-mode,
+        html.deck-mode body {
+            height: 100%;
+            height: 100dvh;
+            overflow: hidden;
+            overscroll-behavior: none;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 16px;
-            }
+        html.deck-mode #intro,
+        html.deck-mode #who,
+        html.deck-mode #architecture,
+        html.deck-mode #privacy,
+        html.deck-mode #join {
+            position: fixed;
+            inset: 0;
+            height: 100%;
+            min-height: 0;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .section-spacing {
-            padding: 80px 0;
+        html.deck-mode #intro.is-on,
+        html.deck-mode #who.is-on,
+        html.deck-mode #architecture.is-on,
+        html.deck-mode #privacy.is-on,
+        html.deck-mode #join.is-on {
+            visibility: visible;
+            pointer-events: auto;
+            z-index: 1;
+        }
+
+        html.deck-mode .beat {
+            min-height: 0;
+            height: 100%;
+        }
+
+        html.deck-mode .intro-sticky,
+        html.deck-mode .who-sticky,
+        html.deck-mode .live-sticky,
+        html.deck-mode .arch-sticky {
+            min-height: 0;
+            height: 100%;
+        }
+
+        a { color: inherit; }
+
+        /* ---------- Intro: Athena + Brand ---------- */
+        #intro {
             position: relative;
+            height: 100vh;
+            background: var(--bg);
         }
 
-        @media (min-width: 768px) {
-            .section-spacing {
-                padding: 120px 0;
-            }
+        .intro-sticky {
+            position: relative;
+            height: 100%;
+            min-height: 100vh;
+            overflow: hidden;
         }
 
-        @media (min-width: 1024px) {
-            .section-spacing {
-                padding: 140px 0;
-            }
-        }
-
-        .card {
-            background: #151515;
-            border: 1px solid #2a2a2a;
-            padding: 32px;
-            transition: border-color 0.3s;
-        }
-
-        .card:hover {
-            border-color: #A0B4E0;
-        }
-
-        .icon-box {
-            width: 48px;
-            height: 48px;
-            border: 1px solid #A0B4E0;
+        .athena-wrap {
+            position: absolute;
+            inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 24px;
+            background: var(--bg);
         }
 
-        .label {
+        .athena-frame {
+            position: relative;
             display: flex;
             align-items: center;
-            justify-content: flex-start;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .label-dot {
-            width: 8px;
-            height: 8px;
-            background: #c2bbff;
-            border: 1px solid #A0B4E0;
-            flex-shrink: 0;
-        }
-
-        .label-text {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #808080;
-        }
-
-        h2 {
-            font-size: 48px;
-            font-weight: 300;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-            color: #ffffff;
-            margin-bottom: 24px;
-            text-align: left;
-        }
-
-        @media (max-width: 768px) {
-            h2 {
-                font-size: 32px;
-            }
-        }
-
-        .subtitle {
-            font-size: 18px;
-            font-weight: 300;
-            color: #a0a0a0;
-            max-width: 600px;
-            margin-bottom: 64px;
-            text-align: left;
-        }
-
-        @media (max-width: 768px) {
-            .subtitle {
-                font-size: 15px;
-                margin-bottom: 48px;
-            }
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 32px;
-        }
-
-        @media (min-width: 768px) {
-            .grid-3 {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .grid-4 {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 32px;
-        }
-
-        @media (min-width: 768px) {
-            .grid-4 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .grid-4 {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 48px;
-        }
-
-        @media (min-width: 1024px) {
-            .grid-2 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-
-        h3 {
-            font-size: 20px;
-            font-weight: 400;
-            color: #ffffff;
-            margin-bottom: 12px;
-            text-align: left;
-        }
-
-        .card-text {
-            font-size: 15px;
-            font-weight: 300;
-            color: #a0a0a0;
-            line-height: 1.6;
-        }
-
-        @media (max-width: 768px) {
-            .card-text {
-                font-size: 14px;
-            }
-        }
-
-        .security-item {
-            border: 1px solid #2a2a2a;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-
-        .security-header {
-            font-size: 24px;
-            font-weight: 400;
-            color: #ffffff;
-            margin-bottom: 32px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .badge {
-            padding: 6px 12px;
-            font-size: 11px;
-            border: 1px solid;
-        }
-
-        .badge-success {
-            background: #c2bbff;
-            color: #A0B4E0;
-            border-color: #A0B4E0;
-        }
-
-        .badge-neutral {
-            background: #1a1a1a;
-            color: #808080;
-            border-color: #2a2a2a;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            background: rgba(160, 180, 224, 0.1);
-            border: 1px solid #A0B4E0;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 300;
-            color: #A0B4E0;
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background: #A0B4E0;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
-        .cta-section {
-            padding-top: 200px;
-            padding-bottom: 200px;
-        }
-
-        @media (max-width: 1024px) {
-            .cta-section {
-                padding-top: 180px;
-                padding-bottom: 180px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .cta-section {
-                padding-top: 160px;
-                padding-bottom: 160px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .cta-section {
-                padding-top: 140px;
-                padding-bottom: 140px;
-            }
-        }
-
-        .hero-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .dartmouth-pill-row {
-            display: flex;
             justify-content: center;
-            margin-top: 96px;
-            width: 100%;
-            opacity: 1;
-            transition: opacity 0.55s ease-out;
-            will-change: opacity;
+            max-width: min(230px, 42vw);
+            max-height: 48vh;
         }
 
-        @media (max-width: 768px) {
-            .dartmouth-pill-row {
-                margin-top: 104px;
-            }
-        }
-
-        .dartmouth-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 18px;
-            background: transparent;
-            color: #ffffff;
-            padding: 14px 26px 14px 22px;
-            border-radius: 9999px;
-            max-width: 100%;
-            border: none;
-            box-shadow: none;
-        }
-
-        .dartmouth-pill img {
-            height: 40px;
+        .athena-img {
             width: auto;
-            flex-shrink: 0;
+            height: auto;
+            max-width: min(230px, 42vw);
+            max-height: 48vh;
+            object-fit: contain;
             display: block;
+            filter: grayscale(1);
+        }
+
+        .star-glow {
+            position: absolute;
+            top: 6%;
+            right: 4%;
+            width: 38%;
+            height: 38%;
+            pointer-events: none;
+            background: radial-gradient(circle, rgba(160,180,225,0.55) 0%, rgba(160,180,225,0.16) 28%, transparent 68%);
+            animation: twinkle 4.8s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.45; transform: scale(0.92); }
+            50% { opacity: 1; transform: scale(1.08); }
+        }
+
+        .athena-dim {
+            position: absolute;
+            inset: 0;
+            background: var(--bg);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .brand-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 36px;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 2;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .wordmark {
+            font-size: clamp(42px, 8vw, 92px);
+            font-weight: 400;
+            letter-spacing: 0.22em;
+            color: var(--white);
+            line-height: 1;
+        }
+
+        .backed {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .backed img {
+            height: 42px;
+            width: auto;
             filter: brightness(0) invert(1);
         }
 
-        .dartmouth-pill-text {
-            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            font-size: 15px;
-            font-weight: 500;
-            line-height: 1.5;
-            letter-spacing: 0.02em;
-            padding: 6px 12px 6px 4px;
-            color: #ffffff;
+        .backed p {
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            color: var(--muted);
         }
 
-        @media (max-width: 480px) {
-            .dartmouth-pill {
-                flex-direction: column;
-                text-align: center;
-                border-radius: 0;
-                padding: 20px 24px;
-            }
-
-            .dartmouth-pill img {
-                height: 36px;
-            }
-
-            .dartmouth-pill-text {
-                font-size: 14px;
-                padding: 10px 6px 2px 6px;
-            }
-        }
-
-        /* Hero responsive styles - matching Locus */
-        .hero-section {
-            padding-top: 240px;
-            padding-left: 40px;
-            padding-right: 40px;
-            padding-bottom: 200px;
-            margin-bottom: 0;
-            text-align: left;
-        }
-
-        .hero-content {
-            max-width: 600px;
-            margin: 0;
-            padding: 0;
-        }
-
-        .hero-wrapper {
+        /* ---------- Shared beats ---------- */
+        .beat {
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            gap: 20px;
+            justify-content: center;
+            padding: 80px 28px;
+            position: relative;
         }
 
-        .hero-graphic {
-            flex: 1;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
+        .beat-copy {
+            max-width: 720px;
+            text-align: center;
         }
 
-        .hero-graphic img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        @media (max-width: 1024px) {
-            .hero-wrapper {
-                flex-direction: column;
-                gap: 40px;
-            }
-
-            .hero-graphic {
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero-graphic {
-                display: none;
-            }
-        }
-
-        .hero-title {
-            font-size: 56px;
+        .beat h2 {
+            font-size: clamp(28px, 4.4vw, 48px);
             font-weight: 300;
-            line-height: 1.2;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            color: var(--white);
+            margin-bottom: 24px;
+        }
+
+        /* ---------- What is Numina ---------- */
+        #who {
+            position: relative;
+            height: 100vh;
+            background: var(--bg);
+        }
+
+        .who-sticky,
+        .live-sticky {
+            position: relative;
+            height: 100%;
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 6vw;
+        }
+
+        .who-stack,
+        .live-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 760px;
+            text-align: center;
+        }
+
+        .who-line {
+            max-width: 720px;
+            font-size: clamp(18px, 2.4vw, 26px);
+            font-weight: 300;
+            color: var(--paper);
+            line-height: 1.55;
             letter-spacing: -0.015em;
-            margin-bottom: 40px;
-            color: #ffffff;
-            text-align: left;
+            text-align: center;
+            opacity: 0;
+            overflow: hidden;
+            height: 0;
+            margin: 0;
         }
 
-        .hero-subtitle {
-            font-size: 17px;
+        .privacy-body {
+            max-width: 640px;
+            font-size: clamp(16px, 2vw, 20px);
             font-weight: 300;
-            color: #a0a0a0;
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 0 0 56px 0;
+            color: var(--muted);
+            line-height: 1.65;
+            margin-top: 28px;
+        }
+
+        .how-live-wrap {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            pointer-events: none;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .how-kicker {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 100%;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin: 0 0 16px;
+            overflow: visible;
+        }
+
+        html.deck-mode #architecture .how-live-wrap {
+            position: absolute;
+            left: 0;
+            right: 0;
+            z-index: 6;
+            padding: 0 6vw;
+        }
+
+        .how-live,
+        .who-live {
+            margin: 0;
+            font-size: clamp(26px, 5.4vw, 84px);
+            font-weight: 400;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            color: var(--white);
+            white-space: nowrap;
+        }
+
+        .how-live {
+            transform-origin: 50% 0%;
+            will-change: transform;
+        }
+
+        /* ---------- Architecture ---------- */
+        #architecture {
+            position: relative;
+            height: 100vh;
+            background: var(--bg);
+        }
+
+        .arch-sticky {
+            position: relative;
+            height: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 36px 6vw 48px;
+            overflow: hidden;
+        }
+
+        html.deck-mode .arch-stack {
+            height: 100%;
+            min-height: 0;
+        }
+
+        .arch-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            min-height: 0;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .arch-rows {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: flex-start;
+            gap: 14px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .arch-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+            gap: 40px;
+            align-items: center;
+            flex-shrink: 0;
+            will-change: transform;
+        }
+
+        .plate {
+            position: relative;
+            padding: 18px 20px;
+            background: rgba(241, 240, 237, 0.04);
+            border: 2px solid var(--line-strong);
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .plate-kicker {
+            font-size: 10px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .plate-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--paper);
+            letter-spacing: -0.02em;
+        }
+
+        .plate-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            border: 1px solid var(--line);
+            background: rgba(241, 240, 237, 0.03);
+            border-radius: 8px;
+            padding: 8px 10px;
+            min-width: 0;
+            flex: 1 1 140px;
+        }
+
+        .chip strong {
+            display: block;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--paper);
+            margin-bottom: 3px;
+        }
+
+        .chip span {
+            display: block;
+            font-size: 11px;
+            font-weight: 300;
+            color: var(--muted);
+            line-height: 1.35;
+        }
+
+        .plate[data-layer="2"] .chip span {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            max-height: 2.7em;
+        }
+
+        .chip-tag {
+            display: inline-block;
+            margin-top: 4px;
+            font-size: 9px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            border: 1px solid rgba(160, 180, 225, 0.45);
+            border-radius: 6px;
+            padding: 2px 7px;
+        }
+
+        #arch-canvas { display: none !important; }
+
+        .layer-copy {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 16px;
+            border-left: 1px solid transparent;
+            opacity: 0.28;
+            transition: border-color 0.4s ease, color 0.4s ease, opacity 0.4s ease;
+        }
+
+        .layer-copy.is-focused {
+            opacity: 1;
+            border-left-color: var(--accent);
+        }
+
+        .layer-copy.is-focused .layer-kicker {
+            color: var(--accent);
+        }
+
+        .layer-copy.is-focused h2 {
+            color: var(--white);
+        }
+
+        .layer-copy.is-focused p {
+            color: var(--paper);
+        }
+
+        .layer-kicker {
+            font-size: 12px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--grey);
+            margin-bottom: 14px;
+        }
+
+        .layer-copy h2 {
+            font-size: clamp(20px, 2.4vw, 28px);
+            text-align: left;
+            margin-bottom: 10px;
+            color: var(--muted);
+        }
+
+        .layer-copy p {
+            font-size: 14px;
+            font-weight: 300;
+            color: var(--muted);
+            max-width: 440px;
             text-align: left;
         }
 
-        @media (max-width: 1024px) {
-            .hero-section {
-                padding-top: 200px;
-                padding-left: 32px;
-                padding-right: 32px;
-                padding-bottom: 160px;
-                margin-bottom: 0;
-            }
+        .arch-tagline {
+            display: block;
+            flex-shrink: 0;
+            text-align: center;
+            font-size: clamp(16px, 2vw, 22px);
+            font-weight: 300;
+            line-height: 1.35;
+            color: var(--paper);
+            letter-spacing: -0.02em;
+            pointer-events: none;
+            margin: 12px 0 0;
+            min-height: 2.7em;
+            opacity: 0;
+        }
 
-            .hero-title {
-                font-size: 48px;
-            }
+        .arch-static { display: none !important; }
+
+        /* ---------- CTA ---------- */
+        .cta-wrap { text-align: center; }
+
+        .btn-beta {
+            display: inline-block;
+            margin-top: 36px;
+            border: 1px solid var(--accent);
+            color: var(--white);
+            padding: 14px 32px;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        .btn-beta:hover,
+        .btn-beta:focus-visible {
+            background: var(--paper);
+            color: var(--bg);
+            border-color: var(--paper);
+            outline: none;
         }
 
         @media (max-width: 768px) {
-            .hero-section {
-                padding-top: 160px;
-                padding-left: 24px;
-                padding-right: 24px;
-                padding-bottom: 120px;
-                margin-bottom: 0;
+            .athena-img { height: auto; max-height: 40vh; max-width: 46vw; }
+            .arch-row {
+                display: block;
+                margin-bottom: 20px;
             }
 
-            .hero-title {
-                font-size: 40px;
-                margin-bottom: 32px;
+            html:not(.deck-mode) #intro { height: auto; }
+            html:not(.deck-mode) .intro-sticky { position: relative; height: auto; }
+            html:not(.deck-mode) .athena-wrap { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; }
+            html:not(.deck-mode) .brand-overlay {
+                position: relative;
+                min-height: 100vh;
+                opacity: 1 !important;
+                transform: none !important;
+                pointer-events: auto;
+                padding: 48px 24px 80px;
+                background: var(--bg);
             }
-
-            .hero-subtitle {
-                font-size: 16px;
-                margin-bottom: 48px;
+            html:not(.deck-mode) .athena-dim { opacity: 0 !important; }
+            html:not(.deck-mode) .arch-sticky {
+                display: block;
+                height: auto;
+                min-height: 100vh;
+                padding: 72px 20px 100px;
+            }
+            html:not(.deck-mode) .how-live,
+            html:not(.deck-mode) .who-live {
+                font-size: clamp(22px, 6vw, 36px);
+                white-space: nowrap;
+            }
+            html:not(.deck-mode) #who { height: auto; }
+            html:not(.deck-mode) .who-sticky {
+                position: relative;
+                height: auto;
+                min-height: 100vh;
+                display: block;
+                padding: 72px 24px;
+            }
+            html:not(.deck-mode) .who-line { opacity: 1 !important; height: auto !important; transform: none !important; }
+            html:not(.deck-mode) #architecture { height: auto; }
+            html:not(.deck-mode) .arch-row {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            html:not(.deck-mode) .arch-tagline {
+                height: auto !important;
+                opacity: 1 !important;
+                transform: none !important;
             }
         }
 
-        @media (max-width: 480px) {
-            .hero-section {
-                padding-top: 140px;
-                padding-left: 20px;
-                padding-right: 20px;
-                padding-bottom: 100px;
-                margin-bottom: 0;
+        @media (prefers-reduced-motion: reduce) {
+            .star-glow { animation: none; opacity: 0.7; }
+            #intro { height: auto; }
+            .intro-sticky { position: relative; }
+            .brand-overlay { opacity: 1 !important; transform: none !important; }
+            .athena-dim { opacity: 0.62 !important; }
+            .beat-copy { opacity: 1 !important; transform: none !important; }
+            #architecture { height: auto; }
+            .arch-sticky { position: relative; height: auto; display: block; padding: 80px 24px; }
+            .arch-row { opacity: 1 !important; transform: none !important; }
+            .arch-tagline { opacity: 1 !important; transform: none !important; position: relative; }
+            #who { height: auto; }
+            .who-sticky { position: relative; height: auto; display: block; padding: 80px 24px; }
+            .live-sticky { position: relative; height: auto; display: block; padding: 80px 24px; }
+            .who-line { opacity: 1 !important; transform: none !important; }
+            .how-live,
+            .who-live {
+                font-size: clamp(22px, 6vw, 36px);
+                white-space: nowrap;
             }
-
-            .hero-title {
-                font-size: 32px;
-                margin-bottom: 28px;
-            }
-
-            .hero-subtitle {
-                font-size: 15px;
-                margin-bottom: 40px;
-            }
+            .who-line { opacity: 1 !important; height: auto !important; }
+            .arch-tagline { height: auto !important; }
         }
     </style>
 </head>
-
 <body>
-    <!-- Header -->
-    <header style="position: absolute; top: 0; left: 0; right: 0; z-index: 50; padding: 32px 40px;">
-        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
-            <a href="#" style="text-decoration: none;">
-                <img src="data:image/svg+xml,%3csvg%20width='160'%20height='26'%20viewBox='0%200%20160%2026'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3ctext%20x='0'%20y='20'%20font-family='Arial,%20sans-serif'%20font-size='22'%20font-weight='bold'%20fill='%23ffffff'%3eNUMINA%3c/text%3e%3c/svg%3e" alt="Numina" style="height: 26px;">
-            </a>
-            <div class="status-badge">
-                <span class="status-dot"></span>
-                <span>MVP ready</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero-section" style="background: #000000;">
-        <div class="hero-inner">
-            <div class="hero-wrapper">
-                <div class="hero-content">
-                    <h1 class="hero-title">
-                        AI Agents for<br>
-                        <span style="color: #666666;">Real-Time Closing</span>
-                    </h1>
-                    <p class="hero-subtitle">
-                        Chasing receipts and matching invoices is eating your margin on small clients. Numina does the grunt work so you can serve more clients profitably.
-                        </p>
-
-                    <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start; margin-top: 56px;">
-                        <a href="https://forms.gle/gprd8EuGD65VVGQYA" target="_blank" style="border: 1px solid #A0B4E0; color: #A0B4E0; padding: 12px 28px; font-size: 14px; text-decoration: none; transition: all 0.3s; display: inline-block;">Join Beta</a>
-                        <p style="font-size: 14px; color: #666666; font-weight: 300; text-align: left;">Free pilot for qualified CPAs</p>
-                    </div>
+    <section class="stage" id="intro" aria-label="Athena">
+        <div class="intro-sticky">
+            <div class="athena-wrap">
+                <div class="athena-frame">
+                    <img
+                        class="athena-img"
+                        src="./newimg.png"
+                        alt="Helmeted Athena looking toward a star"
+                        width="1200"
+                        height="1600"
+                        decoding="async"
+                        fetchpriority="high"
+                    >
+                    <div class="star-glow" aria-hidden="true"></div>
                 </div>
-                <div class="hero-graphic">
-                    <img src="./newimg.png" alt="Hero graphic" style="max-width: 350px; height: auto;">
-                </div>
+                <div class="athena-dim" aria-hidden="true"></div>
             </div>
-            <div class="dartmouth-pill-row" aria-label="Backed by Dartmouth">
-                <div class="dartmouth-pill">
+            <div class="brand-overlay">
+                <h1 class="wordmark">NUMINA</h1>
+                <div class="backed">
                     <img src="./assets/D-Pine_wordmark_BLK.png" alt="Dartmouth College">
-                    <span class="dartmouth-pill-text">Backed by Dartmouth's Conrades Fellowship</span>
+                    <p>Backed by Dartmouth's Conrades Fellowship</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section class="section-spacing" style="padding-top: 120px;">
-        <div class="container">
-            <h2>Connect. Validate. Close.</h2>
-            <p class="subtitle" style="margin-bottom: 64px;">Three simple steps to cleaner books</p>
-
-            <div class="grid-3">
-                <div class="card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A0B4E0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-                    </div>
-                    <h3>Connect your data sources</h3>
-                    <p class="card-text">Emails, spreadsheets, files, invoices wherever your clients' data lives. Numina ingests it automatically.</p>
-                </div>
-
-                <div class="card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A0B4E0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-                    </div>
-                    <h3>Numina validates, standardizes, and flags</h3>
-                    <p class="card-text">AI checks every entry against your rules. Incomplete? Flagged. Missing details? Flagged. Ready for review in real-time.</p>
-                </div>
-
-                <div class="card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A0B4E0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                    </div>
-                    <h3>You review and approve</h3>
-                    <p class="card-text">Nothing hits the books without your sign-off. You see exactly what changed and why.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Three Capabilities Section -->
-    <section class="section-spacing " style="margin-top: 0;">
-        <div class="container">
-            <div class="label">
-                <div class="label-dot"></div>
-                <p class="label-text">Capabilities</p>
-            </div>
-            <h2>One platform. Three time-savers.</h2>
-
-            <div class="grid-3">
-                <div class="card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A0B4E0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    </div>
-                    <h3>Reconcile</h3>
-                    <p style="font-size: 16px; font-weight: 500; color: #ffffff; margin-bottom: 12px;">Invoices to ledger. Automatically.</p>
-                    <p class="card-text">Numina extracts POs, invoices, and receipts from email matches them to your ledger surfaces discrepancies for review.</p>
-                </div>
-
-                <div class="card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A0B4E0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
-                    </div>
-                    <h3>Flag</h3>
-                    <p style="font-size: 16px; font-weight: 500; color: #ffffff; margin-bottom: 12px;">Your rules. Enforced in real-time.</p>
-                    <p class="card-text">Define your standards once: missing descriptions, amounts over threshold, incomplete entries. Numina catches them before they become audit problems.</p>
-                </div>
-
-                <div class="card">
-                    <div class="icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A0B4E0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    </div>
-                    <h3>Research</h3>
-                    <p style="font-size: 16px; font-weight: 500; color: #ffffff; margin-bottom: 12px;">Compliance answers. Instantly.</p>
-                    <p class="card-text">Ask tax and regulatory questions in plain English. Get cited answers without digging through PDFs.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Trust & Control Section -->
-    <section class="section-spacing " style="margin-top: 0; padding-bottom: 200px;">
-        <div class="container">
-            <div class="label">
-                <div class="label-dot"></div>
-                <p class="label-text">Control</p>
-            </div>
-            <h2>AI does the work. You make the decisions.</h2>
-            <p class="subtitle" style="max-width: 700px;">Accountants can't hand the books to a black box. Numina keeps you in control.</p>
-
-            <div class="grid-3">
-                <div class="card">
-                    <h3>You set the rules</h3>
-                    <p class="card-text">Define what gets flagged, what gets auto-approved, what needs review</p>
-                    </div>
-
-                <div class="card">
-                    <h3>You see everything</h3>
-                    <p class="card-text">Full transparency on what the AI changed and why</p>
-                </div>
-
-                <div class="card">
-                    <h3>You approve before it posts</h3>
-                    <p class="card-text">Nothing touches the books without your sign-off</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Bottom CTA Section -->
-    <section class="section-spacing  cta-section">
-        <div class="container">
-            <div style="max-width: 700px; margin: 0;">
-                <h2 style="margin-bottom: 24px;">Ready to take on more clients?</h2>
-                <p style="font-size: 18px; font-weight: 300; color: #a0a0a0; line-height: 1.6; margin-bottom: 40px; text-align: left;">
-                    Free pilot for qualified CPAs. We prove the ROI before you pay.
+    <section class="stage" id="who" aria-labelledby="who-heading">
+        <div class="who-sticky">
+            <div class="who-stack">
+                <h2 class="how-live who-live" id="who-heading">What is Numina?</h2>
+                <p class="who-line">
+                    Numina gives fractional CFOs and the businesses they serve one trustworthy picture of their finances, doing the repetitive work and surfacing what matters, while keeping you in control of every decision.
                 </p>
-                <div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start;">
-                    <a href="https://forms.gle/gprd8EuGD65VVGQYA" target="_blank" style="border: 1px solid #A0B4E0; color: #A0B4E0; padding: 12px 28px; font-size: 14px; text-decoration: none; transition: all 0.3s; display: inline-block;">Join Beta</a>
-                    <p style="font-size: 14px; color: #666666; font-weight: 300; text-align: left;">Limited spots available</p>
-                </div>
             </div>
         </div>
     </section>
 
-    <script>
-        (function () {
-            var el = document.querySelector('.dartmouth-pill-row');
-            if (!el) return;
-            var fadeDistance = 420;
-            function updateDartmouthFade() {
-                var y = window.scrollY || document.documentElement.scrollTop;
-                var t = Math.min(1, Math.max(0, y / fadeDistance));
-                var opacity = 1 - t;
-                el.style.opacity = String(opacity);
-                el.setAttribute('aria-hidden', opacity < 0.05 ? 'true' : 'false');
-                if (opacity < 0.02) {
-                    el.style.pointerEvents = 'none';
-                } else {
-                    el.style.pointerEvents = '';
-                }
-            }
-            window.addEventListener('scroll', updateDartmouthFade, { passive: true });
-            window.addEventListener('resize', updateDartmouthFade, { passive: true });
-            updateDartmouthFade();
-        })();
-    </script>
+    <section class="stage" id="architecture" aria-labelledby="how-heading">
+        <div class="arch-sticky">
+            <div class="arch-stack">
+            <div class="how-live-wrap">
+                <p class="how-kicker">Three layers. One picture.</p>
+                <h2 class="how-live" id="how-heading">How does it work?</h2>
+            </div>
+            <div class="arch-rows">
+                <div class="arch-row" data-layer="0">
+                    <article class="plate" data-layer="0">
+                        <p class="plate-kicker">01 · Data layer</p>
+                        <h3 class="plate-title">The knowledge graph</h3>
+                        <div class="plate-chips">
+                            <div class="chip"><strong>Client data sources</strong><span>Gmail · spreadsheets · ERPs · bank &amp; POS feeds</span></div>
+                            <div class="chip"><strong>Unified ingestion</strong><span>Normalized and deduplicated across every source</span></div>
+                            <div class="chip"><strong>Organization knowledge graph</strong><span>Entities and relationships modeled org-wide</span><span class="chip-tag">Ontology</span></div>
+                        </div>
+                    </article>
+                    <article class="layer-copy" data-layer="0">
+                        <p class="layer-kicker">Layer 1 · Data</p>
+                        <h2>The knowledge graph.</h2>
+                        <p>We connect every client data source, email, spreadsheets, ERPs, bank and card feeds, into one clean, deduplicated picture.</p>
+                    </article>
+                </div>
+                <div class="arch-row" data-layer="1">
+                    <article class="plate" data-layer="1">
+                        <p class="plate-kicker">02 · Execution layer</p>
+                        <h3 class="plate-title">Specialized agents</h3>
+                        <div class="plate-chips">
+                            <div class="chip"><strong>Procure-to-pay (P2P)</strong><span>Capture · match · pay · sync</span><span class="chip-tag">Configurable</span></div>
+                            <div class="chip"><strong>Quote-to-cash (Q2C)</strong><span>Quote · invoice · collect · post</span><span class="chip-tag">Configurable</span></div>
+                            <div class="chip"><strong>Quality-of-earnings agent</strong><span>Tax · ledger · bank · evidence</span><span class="chip-tag">Configurable</span></div>
+                        </div>
+                    </article>
+                    <article class="layer-copy" data-layer="1">
+                        <p class="layer-kicker">Layer 2 · Execution</p>
+                        <h2>Specialized agents.</h2>
+                        <p>Agents do the repetitive work and wait for your approval before anything posts.</p>
+                    </article>
+                </div>
+                <div class="arch-row" data-layer="2">
+                    <article class="plate" data-layer="2">
+                        <p class="plate-kicker">03 · Analytics layer</p>
+                        <h3 class="plate-title">What needs your attention</h3>
+                        <div class="plate-chips">
+                            <div class="chip"><strong>Cash and runway, always current</strong><span>Cash, AR and AP for every client — no report pull.</span></div>
+                            <div class="chip"><strong>Issues surfaced early</strong><span>Risks and anomalies, flagged before they become problems.</span></div>
+                            <div class="chip"><strong>Every flag backed by evidence</strong><span>Trace any number or alert straight back to the source, no black-box answers.</span></div>
+                        </div>
+                    </article>
+                    <article class="layer-copy" data-layer="2">
+                        <p class="layer-kicker">Layer 3 · Analytics</p>
+                        <h2>The financial picture.</h2>
+                        <p>Numina surfaces what matters, cash, runway, the issues worth acting on, so you decide with confidence.</p>
+                    </article>
+                </div>
+            </div>
 
+            <p class="arch-tagline">Your client's full financial context, in one place.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stage" id="privacy" aria-labelledby="privacy-heading">
+        <div class="live-sticky">
+            <div class="live-stack">
+                <h2 class="how-live" id="privacy-heading">Your data stays yours.</h2>
+                <p class="privacy-body">
+                    We build tools where your data stays with you. The value AI creates is owned by you, and is never transferred to any frontier model.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stage" id="join" aria-labelledby="join-heading">
+        <div class="live-sticky">
+            <div class="live-stack cta-wrap">
+                <h2 class="how-live" id="join-heading">Ready to see it?</h2>
+                <a class="btn-beta" href="https://forms.gle/gprd8EuGD65VVGQYA" target="_blank" rel="noopener noreferrer">Join Beta</a>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+    <script src="./assets/cinematic.js" defer></script>
 </body>
 </html>

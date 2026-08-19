@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var BETA_URL = 'https://forms.gle/gprd8EuGD65VVGQYA';
+    var BETA_URL = 'https://calendar.app.google/GD4SWTWd91mKtYNq5';
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     var SCENES = [
@@ -631,22 +631,371 @@
         });
     }
 
+    function setupScroll(gsap) {
+        document.documentElement.classList.add('scroll-mode');
+        qa('.stage').forEach(function (el) {
+            el.classList.add('is-on');
+            el.removeAttribute('aria-hidden');
+            el.removeAttribute('inert');
+            el.style.opacity = '1';
+        });
+        if (!gsap) {
+            revealStatic();
+            return;
+        }
+
+        var dim = q('.athena-dim');
+        var brand = q('.brand-overlay');
+        var img = q('.athena-img');
+        var star = q('.star-glow');
+        var whoAnswer = q('.who-line');
+        var howTitle = q('#architecture .how-live');
+        var howWrap = q('.how-live-wrap');
+        var howKicker = q('.how-kicker');
+        var rows = qa('.arch-row');
+        var copies = qa('.layer-copy');
+        var tagline = q('.arch-tagline');
+        var archRows = q('.arch-rows');
+        var nav = q('#deck-tabs');
+        var scene = -1;
+        var tick = false;
+
+        function clamp(v, min, max) {
+            return Math.max(min, Math.min(max, v));
+        }
+
+        function titleBig() { return clampVw(48, 8, 92); }
+        function titleHowSmall() { return clampVw(40, 4.8, 52); }
+        function howScale() { return titleHowSmall() / titleBig(); }
+        function riseFrom() { return Math.round(window.innerHeight * 0.72); }
+
+        function archMode() {
+            var w = window.innerWidth;
+            var h = window.innerHeight;
+            var portrait = h >= w;
+            if (portrait && w < 760) return 'compact';
+            if (h < 760) return 'compact';
+            return 'full';
+        }
+
+        function rowDisplay() {
+            return archMode() === 'compact' ? 'flex' : 'grid';
+        }
+
+        function syncArchMode(layers) {
+            document.documentElement.setAttribute('data-arch', archMode());
+            document.documentElement.setAttribute('data-arch-layers', String(layers || 0));
+        }
+
+        function setFocus(layerCount, all) {
+            copies.forEach(function (el, i) {
+                el.classList.toggle('is-focused', all || i === layerCount - 1);
+            });
+        }
+
+        function applyIntro(showBrand, dur) {
+            var t = dur || 0;
+            gsap.to(dim, { opacity: showBrand ? 0.88 : 0, duration: t, ease: 'power2.inOut', overwrite: 'auto' });
+            gsap.to(brand, { opacity: showBrand ? 1 : 0, y: showBrand ? 0 : 16, duration: t, ease: 'power2.inOut', overwrite: 'auto' });
+            if (img) gsap.to(img, { scale: showBrand ? 1.03 : 1, duration: t, ease: 'power2.inOut', overwrite: 'auto' });
+            if (star) gsap.to(star, { opacity: showBrand ? 0.45 : 0.9, duration: t, ease: 'power2.inOut', overwrite: 'auto' });
+        }
+
+        function applyWho(answered, dur) {
+            scrubWho(answered ? 1 : 0);
+        }
+
+        var whoH = 0;
+        function measureWho() {
+            if (!whoAnswer) return;
+            var prevH = whoAnswer.style.height;
+            var prevO = whoAnswer.style.opacity;
+            whoAnswer.style.height = 'auto';
+            whoH = whoAnswer.scrollHeight;
+            whoAnswer.style.height = prevH;
+            whoAnswer.style.opacity = prevO;
+        }
+
+        function scrubWho(amount) {
+            if (!whoAnswer) return;
+            var reveal = clamp(amount, 0, 1);
+            reveal = reveal * reveal * (3 - 2 * reveal);
+            gsap.killTweensOf(whoAnswer);
+            gsap.set(whoAnswer, {
+                overflow: 'hidden',
+                opacity: reveal,
+                height: Math.round(whoH * reveal),
+                marginTop: 24 * reveal,
+                y: 14 * (1 - reveal)
+            });
+        }
+
+        function whoRevealFromScroll() {
+            var who = q('#who');
+            var architecture = q('#architecture');
+            if (!who || !architecture) return 0;
+            var y = window.scrollY;
+            if (y < who.offsetTop) return 0;
+            if (y >= architecture.offsetTop) return 1;
+            return clamp((pinProgress(who) - 0.08) / 0.62, 0, 1);
+        }
+
+        function dockTop() {
+            return Math.round(Math.max(56, Math.min(72, window.innerHeight * 0.09)));
+        }
+
+        function reserveArchHeading() {
+            if (!archRows || !howTitle) return;
+            var sticky = q('.arch-sticky');
+            if (!sticky) return;
+            var layers = parseInt(document.documentElement.getAttribute('data-arch-layers') || '0', 10);
+            if (layers < 3) {
+                document.documentElement.style.setProperty('--arch-head-space', '0px');
+                return;
+            }
+            var stickyPad = parseFloat(window.getComputedStyle(sticky).paddingTop) || 0;
+            var size = parseFloat(window.getComputedStyle(howTitle).fontSize) || 48;
+            var line = parseFloat(window.getComputedStyle(howTitle).lineHeight);
+            if (!isFinite(line) || line < 8) line = size * 1.05;
+            var visualH = line * howScale();
+            var need = Math.ceil(dockTop() + visualH + 28 - stickyPad);
+            document.documentElement.style.setProperty('--arch-head-space', Math.max(96, need) + 'px');
+        }
+
+        function fitHeadings() {
+            qa('#who-heading, #how-heading, #privacy-heading, #join-heading').forEach(function (el) {
+                if (!el) return;
+                el.style.fontSize = '';
+                var box = el.parentElement;
+                if (!box) return;
+                var maxW = box.clientWidth;
+                if (maxW < 40) return;
+                var size = parseFloat(window.getComputedStyle(el).fontSize);
+                var guard = 0;
+                while (el.scrollWidth > maxW && size > 16 && guard < 48) {
+                    size -= 0.75;
+                    el.style.fontSize = size + 'px';
+                    guard += 1;
+                }
+            });
+        }
+
+        function applyArch(step, dur) {
+            var t = dur || 0;
+            var layers = step <= 0 ? 0 : Math.min(3, step);
+            var showTag = step >= 4;
+            var showTitleSmall = step >= 1;
+
+            if (howWrap) {
+                gsap.to(howWrap, {
+                    top: showTitleSmall ? dockTop() : window.innerHeight * 0.5,
+                    yPercent: showTitleSmall ? 0 : -50,
+                    duration: t,
+                    ease: 'power3.inOut',
+                    overwrite: 'auto'
+                });
+            }
+            if (howTitle) {
+                gsap.to(howTitle, {
+                    scale: showTitleSmall ? howScale() : 1,
+                    duration: t,
+                    ease: 'power3.inOut',
+                    overwrite: 'auto'
+                });
+            }
+            if (howKicker) {
+                gsap.to(howKicker, {
+                    autoAlpha: step === 0 ? 1 : 0,
+                    y: step === 0 ? 0 : 8,
+                    duration: t ? Math.min(0.35, t * 0.45) : 0,
+                    ease: 'power2.out',
+                    overwrite: 'auto'
+                });
+            }
+            if (archRows) gsap.set(archRows, { display: layers ? 'flex' : 'none' });
+
+            rows.forEach(function (row, i) {
+                var on = i < layers;
+                var visible = window.getComputedStyle(row).display !== 'none';
+                if (on) {
+                    if (!visible) {
+                        gsap.set(row, { display: rowDisplay(), autoAlpha: 1, y: t ? riseFrom() : 0, zIndex: 4 });
+                        gsap.to(row, {
+                            y: 0,
+                            duration: t,
+                            ease: 'power3.out',
+                            overwrite: 'auto',
+                            onComplete: function () { gsap.set(row, { zIndex: 1 }); }
+                        });
+                    } else {
+                        gsap.to(row, { y: 0, autoAlpha: 1, duration: t ? 0.35 : 0, ease: 'power2.out', overwrite: 'auto' });
+                    }
+                } else if (visible) {
+                    gsap.to(row, {
+                        y: riseFrom(),
+                        duration: t ? t * 0.7 : 0,
+                        ease: 'power3.in',
+                        overwrite: 'auto',
+                        onComplete: function () {
+                            if (i >= layers) gsap.set(row, { display: 'none', y: riseFrom() });
+                        }
+                    });
+                    if (!t) gsap.set(row, { display: 'none', y: riseFrom(), autoAlpha: 1 });
+                } else if (!t) {
+                    gsap.set(row, { display: 'none', y: riseFrom(), autoAlpha: 1 });
+                }
+            });
+
+            if (tagline) {
+                if (step === 0) gsap.set(tagline, { display: 'none', opacity: 0 });
+                else {
+                    gsap.set(tagline, { display: 'block' });
+                    gsap.to(tagline, { opacity: showTag ? 1 : 0, duration: t, ease: 'power2.out', overwrite: 'auto' });
+                }
+            }
+            setFocus(layers, showTag);
+            syncArchMode(layers);
+            reserveArchHeading();
+            gsap.delayedCall((t || 0.02) + 0.02, fitHeadings);
+        }
+
+        function applyScene(index, dur) {
+            var name = SCENES[index];
+            if (name === 'athena') applyIntro(false, dur);
+            if (name === 'brand') applyIntro(true, dur);
+            if (name === 'how') applyArch(0, dur);
+            if (name === 'arch-0') applyArch(1, dur);
+            if (name === 'arch-1') applyArch(2, dur);
+            if (name === 'arch-2') applyArch(3, dur);
+            if (name === 'arch-tag') applyArch(4, dur);
+        }
+
+        function pinProgress(el) {
+            var range = Math.max(1, el.offsetHeight - window.innerHeight);
+            return clamp((window.scrollY - el.offsetTop) / range, 0, 1);
+        }
+
+        function sceneFromScroll() {
+            var y = window.scrollY;
+            var intro = q('#intro');
+            var who = q('#who');
+            var architecture = q('#architecture');
+            var privacy = q('#privacy');
+            var join = q('#join');
+            if (!intro || !who || !architecture || !privacy || !join) return 0;
+
+            if (y < who.offsetTop) return pinProgress(intro) < 0.2 ? 0 : 1;
+            if (y < architecture.offsetTop) return pinProgress(who) < 0.38 ? 2 : 3;
+            if (y < privacy.offsetTop) {
+                var pArch = pinProgress(architecture);
+                if (pArch < 0.17) return 4;
+                if (pArch < 0.36) return 5;
+                if (pArch < 0.55) return 6;
+                if (pArch < 0.74) return 7;
+                return 8;
+            }
+            if (y < join.offsetTop) return 9;
+            return 10;
+        }
+
+        function syncTabs(index) {
+            if (!nav) return;
+            var active = 4;
+            if (index <= 1) active = 0;
+            else if (index <= 3) active = 1;
+            else if (index <= 8) active = 2;
+            else if (index === 9) active = 3;
+            qa('.deck-tab', nav).forEach(function (btn, i) {
+                var on = i === active;
+                btn.classList.toggle('is-current', on);
+                if (on) btn.setAttribute('aria-current', 'page');
+                else btn.removeAttribute('aria-current');
+            });
+        }
+
+        function updateFromScroll() {
+            var next = sceneFromScroll();
+            if (next !== scene) {
+                applyScene(next, scene < 0 ? 0 : 0.85);
+                syncTabs(next);
+                scene = next;
+            }
+            scrubWho(whoRevealFromScroll());
+            tick = false;
+        }
+
+        if (nav) {
+            nav.hidden = false;
+            qa('.deck-tab', nav).forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var targetScene = parseInt(btn.getAttribute('data-scene'), 10);
+                    var map = {
+                        1: q('#intro'),
+                        3: q('#who'),
+                        8: q('#architecture'),
+                        9: q('#privacy'),
+                        10: q('#join')
+                    };
+                    var el = map[targetScene];
+                    if (!el) return;
+                    var range = Math.max(0, el.offsetHeight - window.innerHeight);
+                    var dest = el.offsetTop;
+                    if (targetScene === 1) dest += range * 0.45;
+                    if (targetScene === 3) dest += range * 0.6;
+                    if (targetScene === 8) dest += range * 0.9;
+                    window.scrollTo({ top: dest, behavior: 'smooth' });
+                });
+            });
+        }
+
+        gsap.set(dim, { opacity: 0 });
+        gsap.set(brand, { opacity: 0, y: 16 });
+        if (img) gsap.set(img, { scale: 1 });
+        gsap.set(whoAnswer, { opacity: 0, height: 0, overflow: 'hidden', marginTop: 0, y: 14 });
+        measureWho();
+        if (howTitle) gsap.set(howTitle, { scale: 1, transformOrigin: '50% 0%' });
+        if (howWrap) gsap.set(howWrap, { top: window.innerHeight * 0.5, yPercent: -50 });
+        if (howKicker) gsap.set(howKicker, { autoAlpha: 1, y: 0 });
+        rows.forEach(function (row) { gsap.set(row, { y: riseFrom(), autoAlpha: 1, display: 'none' }); });
+        if (archRows) gsap.set(archRows, { display: 'none' });
+        if (tagline) gsap.set(tagline, { opacity: 0, display: 'none' });
+        setFocus(0, false);
+        syncArchMode(0);
+
+        window.addEventListener('scroll', function () {
+            if (!tick) {
+                tick = true;
+                requestAnimationFrame(updateFromScroll);
+            }
+        }, { passive: true });
+        window.addEventListener('resize', function () {
+            syncArchMode(scene >= 8 ? 3 : scene >= 7 ? 3 : scene >= 6 ? 2 : scene >= 5 ? 1 : 0);
+            measureWho();
+            updateFromScroll();
+        });
+
+        updateFromScroll();
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
-        qa('a[href="' + BETA_URL + '"]').forEach(function (a) {
+        qa('.btn-beta').forEach(function (a) {
+            a.setAttribute('href', BETA_URL);
+            a.setAttribute('target', '_blank');
             a.setAttribute('rel', 'noopener noreferrer');
         });
 
         if (reduceMotion) {
-            revealStatic();
+            setupScroll(null);
             return;
         }
 
         loadGsap(function (gsap) {
             if (!gsap) {
-                revealStatic();
+                setupScroll(null);
                 return;
             }
-            setupDeck(gsap);
+            setupScroll(gsap);
         });
     });
 })();

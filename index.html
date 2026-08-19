@@ -105,7 +105,39 @@
             height: 100%;
         }
 
-        a { color: inherit; }
+        a { color: inherit; text-decoration: none; }
+
+        a.btn-beta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 40px;
+            min-width: 200px;
+            padding: 16px 40px;
+            background: var(--white);
+            border: 2px solid var(--white);
+            border-radius: 10px;
+            color: var(--bg);
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            line-height: 1;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        a.btn-beta:hover,
+        a.btn-beta:focus-visible {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg);
+            outline: none;
+        }
 
         .deck-tabs {
             display: none;
@@ -121,7 +153,8 @@
             pointer-events: none;
         }
 
-        html.deck-mode .deck-tabs {
+        html.deck-mode .deck-tabs,
+        html.scroll-mode .deck-tabs {
             display: flex;
         }
 
@@ -177,6 +210,133 @@
 
         html.deck-mode .scroll-hint.is-gone {
             opacity: 0;
+        }
+
+        html.scroll-mode .scroll-hint {
+            display: none;
+        }
+
+        /* ---------- Continuous scroll with pinned cinematic beats ---------- */
+        html.scroll-mode,
+        html.scroll-mode body {
+            height: auto;
+            overflow: visible;
+        }
+
+        html.scroll-mode #intro,
+        html.scroll-mode #who,
+        html.scroll-mode #architecture,
+        html.scroll-mode #privacy,
+        html.scroll-mode #join {
+            position: relative;
+            height: auto;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        html.scroll-mode #intro { min-height: 168vh; }
+        html.scroll-mode #who { min-height: 200vh; }
+        html.scroll-mode #architecture { min-height: 300vh; }
+        html.scroll-mode #privacy { min-height: 155vh; }
+        html.scroll-mode #join { min-height: 100vh; }
+
+        html.scroll-mode .intro-sticky,
+        html.scroll-mode .who-sticky,
+        html.scroll-mode .live-sticky,
+        html.scroll-mode .arch-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        html.scroll-mode .athena-wrap {
+            position: absolute;
+            inset: 0;
+            height: 100%;
+            z-index: 0;
+        }
+
+        html.scroll-mode .brand-overlay {
+            position: absolute;
+            inset: 0;
+            min-height: 0;
+            z-index: 2;
+        }
+
+        html.scroll-mode #architecture .how-live-wrap {
+            position: absolute;
+            left: 0;
+            right: 0;
+            z-index: 6;
+            padding: 0 6vw;
+        }
+
+        html.scroll-mode .arch-stack {
+            height: 100%;
+            min-height: 0;
+        }
+
+        html.scroll-mode[data-arch="full"] .arch-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+            flex: 0 0 auto;
+            height: auto;
+            align-items: center;
+        }
+
+        html.scroll-mode[data-arch="full"] .plate {
+            height: auto !important;
+            padding: 18px 20px;
+            gap: 12px;
+        }
+
+        html.scroll-mode[data-arch="full"][data-arch-layers="3"] .arch-sticky {
+            justify-content: flex-start;
+        }
+
+        html.scroll-mode[data-arch="full"][data-arch-layers="3"] .arch-rows {
+            flex: 1 1 auto;
+            justify-content: center;
+            padding-top: var(--arch-head-space, 108px);
+            padding-bottom: 12px;
+        }
+
+        html.scroll-mode[data-arch="compact"] .plate {
+            display: none !important;
+        }
+
+        html.scroll-mode[data-arch="compact"] .arch-row {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 0 0 auto;
+            height: auto;
+            gap: 0;
+        }
+
+        html.scroll-mode[data-arch="compact"] .layer-copy {
+            height: auto;
+            padding: 16px 8px;
+            border-left: none;
+            border-top: 1px solid transparent;
+        }
+
+        html.scroll-mode[data-arch="compact"] .layer-copy.is-focused {
+            border-top-color: var(--accent);
+        }
+
+        html.scroll-mode[data-arch="compact"][data-arch-layers="3"] .arch-sticky {
+            justify-content: flex-start;
+        }
+
+        html.scroll-mode[data-arch="compact"][data-arch-layers="3"] .arch-rows {
+            flex: 1 1 auto;
+            justify-content: center;
+            padding-top: var(--arch-head-space, 108px);
+            padding-bottom: 12px;
         }
 
         .scroll-hint-icon {
@@ -508,7 +668,7 @@
 
         html.deck-mode[data-arch="full"][data-arch-layers="3"] .arch-rows {
             flex: 1 1 auto;
-            justify-content: space-between;
+            justify-content: center;
             padding-top: var(--arch-head-space, 108px);
             padding-bottom: 12px;
         }
@@ -546,7 +706,7 @@
 
         html.deck-mode[data-arch="compact"][data-arch-layers="3"] .arch-rows {
             flex: 1 1 auto;
-            justify-content: space-between;
+            justify-content: center;
             padding-top: var(--arch-head-space, 108px);
             padding-bottom: 12px;
         }
@@ -562,7 +722,7 @@
             flex-direction: column;
             align-items: stretch;
             min-height: 0;
-            gap: 20px;
+            gap: 12px;
             flex: 1;
         }
 
@@ -572,7 +732,7 @@
             display: flex;
             flex-direction: column-reverse;
             justify-content: flex-start;
-            gap: 14px;
+            gap: 8px;
             width: 100%;
             overflow: hidden;
         }
@@ -580,8 +740,7 @@
         .arch-row {
             display: grid;
             grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-            gap: 40px;
-            align-items: center;
+            gap: 24px;
             flex-shrink: 0;
             will-change: transform;
         }
@@ -740,28 +899,6 @@
         /* ---------- CTA ---------- */
         .cta-wrap { text-align: center; }
 
-        .btn-beta {
-            display: inline-block;
-            margin-top: 36px;
-            border: 1px solid var(--accent);
-            color: var(--white);
-            padding: 14px 32px;
-            font-size: 14px;
-            font-weight: 400;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: background 0.3s, color 0.3s, border-color 0.3s;
-        }
-
-        .btn-beta:hover,
-        .btn-beta:focus-visible {
-            background: var(--paper);
-            color: var(--bg);
-            border-color: var(--paper);
-            outline: none;
-        }
-
         @media (max-width: 1100px) {
             .arch-row {
                 grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
@@ -809,7 +946,7 @@
             html.deck-mode .live-sticky { padding: 28px 5vw; }
             .who-line,
             .privacy-body { font-size: clamp(15px, 3.6vw, 20px); }
-            .arch-rows { gap: 10px; }
+            .arch-rows { gap: 6px; }
             .arch-tagline { font-size: clamp(14px, 3.4vw, 18px); min-height: 2.2em; margin-top: 8px; }
         }
 
@@ -844,10 +981,10 @@
                 margin-bottom: 20px;
             }
 
-            html:not(.deck-mode) #intro { height: auto; }
-            html:not(.deck-mode) .intro-sticky { position: relative; height: auto; }
-            html:not(.deck-mode) .athena-wrap { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; }
-            html:not(.deck-mode) .brand-overlay {
+            html:not(.deck-mode):not(.scroll-mode) #intro { height: auto; }
+            html:not(.deck-mode):not(.scroll-mode) .intro-sticky { position: relative; height: auto; }
+            html:not(.deck-mode):not(.scroll-mode) .athena-wrap { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; }
+            html:not(.deck-mode):not(.scroll-mode) .brand-overlay {
                 position: relative;
                 min-height: 100vh;
                 opacity: 1 !important;
@@ -856,8 +993,8 @@
                 padding: 48px 24px 80px;
                 background: var(--bg);
             }
-            html:not(.deck-mode) .athena-dim { opacity: 0 !important; }
-            html:not(.deck-mode) .arch-sticky {
+            html:not(.deck-mode):not(.scroll-mode) .athena-dim { opacity: 0 !important; }
+            html:not(.deck-mode):not(.scroll-mode) .arch-sticky {
                 display: block;
                 height: auto;
                 min-height: 100vh;
@@ -868,21 +1005,21 @@
                 font-size: clamp(22px, 6vw, 36px);
                 white-space: nowrap;
             }
-            html:not(.deck-mode) #who { height: auto; }
-            html:not(.deck-mode) .who-sticky {
+            html:not(.deck-mode):not(.scroll-mode) #who { height: auto; }
+            html:not(.deck-mode):not(.scroll-mode) .who-sticky {
                 position: relative;
                 height: auto;
                 min-height: 100vh;
                 display: block;
                 padding: 72px 24px;
             }
-            html:not(.deck-mode) .who-line { opacity: 1 !important; height: auto !important; transform: none !important; }
-            html:not(.deck-mode) #architecture { height: auto; }
-            html:not(.deck-mode) .arch-row {
+            html:not(.deck-mode):not(.scroll-mode) .who-line { opacity: 1 !important; height: auto !important; transform: none !important; }
+            html:not(.deck-mode):not(.scroll-mode) #architecture { height: auto; }
+            html:not(.deck-mode):not(.scroll-mode) .arch-row {
                 opacity: 1 !important;
                 transform: none !important;
             }
-            html:not(.deck-mode) .arch-tagline {
+            html:not(.deck-mode):not(.scroll-mode) .arch-tagline {
                 height: auto !important;
                 opacity: 1 !important;
                 transform: none !important;
@@ -920,7 +1057,7 @@
         <button type="button" class="deck-tab" data-scene="3">What</button>
         <button type="button" class="deck-tab" data-scene="8">How</button>
         <button type="button" class="deck-tab" data-scene="9">Privacy</button>
-        <button type="button" class="deck-tab" data-scene="10">Join</button>
+        <button type="button" class="deck-tab" data-scene="10">Call</button>
     </nav>
     <div class="scroll-hint" id="scroll-hint" aria-label="Scroll">
         <svg class="scroll-hint-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -1043,8 +1180,8 @@
     <section class="stage" id="join" aria-labelledby="join-heading">
         <div class="live-sticky">
             <div class="live-stack cta-wrap">
-                <h2 class="how-live" id="join-heading">Ready to see it?</h2>
-                <a class="btn-beta" href="https://forms.gle/gprd8EuGD65VVGQYA" target="_blank" rel="noopener noreferrer">Join Beta</a>
+                <h2 class="how-live" id="join-heading">Want to learn more?</h2>
+                <a class="btn-beta" href="https://calendar.app.google/GD4SWTWd91mKtYNq5" target="_blank" rel="noopener noreferrer">Book a call</a>
             </div>
         </div>
     </section>
@@ -1062,6 +1199,6 @@
             border: 0;
         }
     </style>
-    <script src="./assets/cinematic.js" defer></script>
+    <script src="./assets/cinematic.js?v=hold" defer></script>
 </body>
 </html>
